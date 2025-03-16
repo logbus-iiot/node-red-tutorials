@@ -1,12 +1,9 @@
-# Node-RED Beginner Guide
-
-Welcome to Node-RED! This guide will help you get started with Node-RED, a flow-based development tool for visual programming, perfect for wiring together devices, APIs, and online services.
-
----
 
 ## 🚀 What is Node-RED?
 
 Node-RED is a low-code programming tool for event-driven applications. It uses a visual editor to wire together devices, APIs, and services using a browser-based flow editor.
+
+[See a GitHub IO web version](https://logbus-iiot.github.io/node-red-tutorials/installation.html)
 
 ---
 

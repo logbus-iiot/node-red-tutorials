@@ -1,8 +1,9 @@
-Here is the **cleaned-up and revised version** of the `installation.md` along with the steps for pushing to GitHub. The formatting is now clean and easier to follow.
 
----
+## 🚀 What is Node-RED?
 
-## 📄 **`installation.md` (Installation Guide)**
+Node-RED is a low-code programming tool for event-driven applications. It uses a visual editor to wire together devices, APIs, and services using a browser-based flow editor.
+
+[See a GitHub IO web version](https://logbus-iiot.github.io/node-red-tutorials/installation.html)
 
 # 📦 Node-RED Installation Guide
 
