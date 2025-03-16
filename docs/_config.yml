@@ -1,0 +1,16 @@
+title: "Node-RED Beginner Guide"
+remote_theme: just-the-docs/just-the-docs
+color_scheme: "light"
+
+# Sidebar Navigation
+nav:
+  - title: "Introduction"
+    url: index.md
+  - title: "Installation"
+    url: installation.md
+  - title: "Basic Concepts"
+    url: concepts.md
+  - title: "First Flow Example"
+    url: first-flow.md
+  - title: "Security Practices"
+    url: security.md
