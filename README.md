@@ -3,11 +3,11 @@
 
 Node-RED is a low-code programming tool for event-driven applications. It uses a visual editor to wire together devices, APIs, and services using a browser-based flow editor.
 
-[See a GitHub IO web version](https://logbus-iiot.github.io/node-red-tutorials/installation.html)
+[See online tutorial to setup Node Red with Docker](https://logbus-iiot.github.io/node-red-tutorials/installation.html)
 
 ---
 
-## 📦 Installation
+## 📦 Traditional Node Red Install Without Docker
 
 ### Prerequisites:
 - **Node.js** (v14 or later)

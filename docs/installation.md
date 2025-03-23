@@ -5,189 +5,143 @@ Node-RED is a low-code programming tool for event-driven applications. It uses a
 
 [See a GitHub IO web version](https://logbus-iiot.github.io/node-red-tutorials/installation.html)
 
-# 📦 Node-RED Installation Guide
+## 🐳 Node-RED Docker Cheat Sheet (with HTTPS/SSL, Flows, and Password)
 
-This guide walks you through the installation and setup of Node-RED.
-
----
-
-## ✅ Prerequisites
-
-- **Node.js** (version 14 or later)  
-  [Download Node.js](https://nodejs.org/) and install it for your operating system.  
-- **npm** (comes with Node.js)
-
----
-
-## ⚙️ Steps to Install Node-RED
-
-### 1. Install Node-RED Globally
-
-Open your terminal and run:
+### ✅ 1. Install Docker (on Raspberry Pi or Linux)
 
 ```bash
-npm install -g --unsafe-perm node-red
+curl -sL https://get.docker.com | sh
+sudo usermod -aG docker $USER
 ```
 
-- The `--unsafe-perm` flag is recommended for environments like Linux where Node.js is installed as the root user.
+> 🔁 Reboot or log out/log in after adding yourself to the `docker` group.
 
 ---
 
-### 2. Start Node-RED
-
-Run the following command to start the Node-RED server:
+### 🔐 2. Generate password hash for `settings.js`
 
 ```bash
-node-red
+docker run -it --rm --entrypoint bash nodered/node-red
 ```
 
----
-
-### 3. Access the Node-RED Editor
-
-Once Node-RED is running, open your browser and navigate to:
-
-```
-http://localhost:1880
-```
-
-You should see the Node-RED visual editor.
-
----
-
-### 4. Auto-Start Node-RED on Boot (Linux)
-
-To ensure Node-RED starts on system boot:
+Inside the container:
 
 ```bash
-sudo systemctl enable nodered.service
-sudo systemctl start nodered.service
+node -e "console.log(require('bcryptjs').hashSync('mySecurePassword123', 8))"
 ```
 
-- To check the status:
+Use the resulting bcrypt hash in your `settings.js`:
+
+```js
+adminAuth: {
+  type: "credentials",
+  users: [{
+    username: "your-username",
+    password: "paste-your-bcrypt-hash-here",
+    permissions: "*"
+  }]
+}
+```
+
+---
+
+### 🔐 3. Generate Self-Signed SSL Certificate
+Good for a 100 years with the `-days 36500`
+```bash
+mkdir certs
+openssl req -x509 -nodes -days 36500 -newkey rsa:2048 \
+  -keyout certs/privkey.pem -out certs/cert.pem \
+  -subj "/CN=node-red.local"
+
+```
+
+This gives you:
+
+- `certs/privkey.pem`
+- `certs/cert.pem`
+
+---
+
+### ⚙️ 4. Create Folder Structure
+
+```
+node-red-app/
+├── Dockerfile
+├── settings.js     ← with HTTPS + adminAuth
+├── flows/
+│   └── flows.json
+└── certs/
+    ├── privkey.pem
+    └── cert.pem
+```
+
+---
+
+### ⚙️ 5. Modify `settings.js` for HTTPS
+
+```js
+https: {
+  key: require("fs").readFileSync('/data/certs/privkey.pem'),
+  cert: require("fs").readFileSync('/data/certs/cert.pem')
+},
+requireHttps: true,
+```
+
+Also ensure `adminAuth` is enabled.
+
+---
+
+### 🛠️ 6. Build Docker Image
 
 ```bash
-sudo systemctl status nodered.service
+docker build -t custom-nodered .
 ```
 
 ---
 
-### 5. Updating Node-RED
+### 🚀 7. Run Node-RED with local `settings.js`, flows, and certs
 
-To update Node-RED to the latest version:
+This is the KEY part that was missing before:
 
 ```bash
-npm update -g --unsafe-perm node-red
+docker run -d \
+  --name custom-nodered \
+  -p 1880:1880 \
+  -v $PWD:/data \
+  --restart unless-stopped \
+  custom-nodered
 ```
+
+> ❗ This mounts your entire `node-red-app` project folder into `/data`, ensuring `settings.js`, `flows/`, and `certs/` are all seen by Node-RED.
 
 ---
 
-### 6. Changing the Port
-
-By default, Node-RED runs on port `1880`. To change it:
-
-1. Open the settings file (usually located at `~/.node-red/settings.js`).
-
-2. Update the port:
-
-```javascript
-module.exports = {
-    uiPort: process.env.PORT || 1880,
-};
-```
-
-3. Restart Node-RED:
+### 🧼 8. Rebuild and Restart After Changes
 
 ```bash
-node-red-stop
-node-red-start
+docker stop custom-nodered
+docker rm custom-nodered
+docker build -t custom-nodered .
+docker run -d \
+  --name custom-nodered \
+  -p 1880:1880 \
+  -v $PWD:/data \
+  --restart unless-stopped \
+  custom-nodered
 ```
 
 ---
 
-## 🚑 Troubleshooting
+### 🌐 9. Access Node-RED via HTTPS
 
-- **Issue:** `command not found: node-red`  
-  **Solution:** Ensure Node.js and npm are correctly installed, and try reinstalling Node-RED.
+- On the Pi:
+  ```
+  https://localhost:1880
+  ```
 
-- **Issue:** Port is already in use  
-  **Solution:** Check for running processes using that port:
+- On another device:
+  ```
+  https://<your-pi-ip>:1880
+  ```
 
-```bash
-sudo lsof -i :1880
-```
-
-Kill the process if necessary:
-
-```bash
-sudo kill <PID>
-```
-
----
-
-You’re now ready to start building flows in Node-RED! 🚀
-
----
-
-## 🚀 **Steps to Push to GitHub**
-
-### 1. Initialize the Repository (if not already done)
-
-```bash
-git init
-```
-
----
-
-### 2. Add Remote Repository (if not already set)
-
-```bash
-git remote add origin https://github.com/username/repository.git
-```
-
-Replace `username` and `repository` with your actual GitHub username and repository name.
-
----
-
-### 3. Add Files to Git
-
-```bash
-git add .
-```
-
----
-
-### 4. Commit Your Changes
-
-```bash
-git commit -m "Add Node-RED documentation with Just the Docs setup"
-```
-
----
-
-### 5. Push to GitHub
-
-```bash
-git push -u origin main
-```
-
----
-
-### ✅ **If Using GitHub Pages**
-
-1. Go to your **GitHub repository → Settings → Pages**.
-2. Under **Source**, select the branch (`main` or `gh-pages`).
-3. Set the folder to `/ (root)` or `/docs` depending on your structure.
-4. Click **Save**.
-
----
-
-Once pushed, your documentation will be live at:
-
-```
-https://<username>.github.io/<repository>/
-```
-
----
-
-This setup will give you a **clean, professional, and scalable documentation site** using **Just the Docs**. 🚀
+> ⚠️ You’ll likely see a browser warning due to the self-signed cert — that’s expected.

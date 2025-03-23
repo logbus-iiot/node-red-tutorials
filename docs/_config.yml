@@ -6,7 +6,7 @@ color_scheme: "light"
 nav:
   - title: "Introduction"
     url: index.md
-  - title: "Installation"
+  - title: "Installation With Docker"
     url: installation.md
   - title: "Basic Concepts"
     url: concepts.md
