@@ -1,11 +1,4 @@
-
-## 🚀 What is Node-RED?
-
-Node-RED is a low-code programming tool for event-driven applications. It uses a visual editor to wire together devices, APIs, and services using a browser-based flow editor.
-
-[See a GitHub IO web version](https://logbus-iiot.github.io/node-red-tutorials/installation.html)
-
-## 🐳 Node-RED Docker Cheat Sheet (with HTTPS/SSL, Flows, and Password)
+# 🐳 Node-RED Docker Cheat Sheet (with HTTPS/SSL, Flows, and Password)
 
 ### ✅ 1. Install Docker (on Raspberry Pi or Linux)
 

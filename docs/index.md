@@ -8,9 +8,9 @@ This guide will help you get started with Node-RED, a flow-based development too
 
 - [🚀 What is Node-RED?](installation.md#what-is-node-red)
 - [🐳 Installation With Docker](installation.md)
-- [🛠️ Basic Concepts](concepts.md) *(coming soon...)*
-- [✨ Creating Your First Flow](first-flow.md) *(coming soon...)*
-- [🛡️ Security Best Practices](security.md) *(coming soon...)*
+- [🛠️ Basic Concepts](concepts.md)
+- [✨ Creating Your First Flow](first-flow.md)
+- [🛡️ Security Best Practices](security.md)
 
 ---
 
